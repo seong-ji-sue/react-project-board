@@ -95,7 +95,7 @@ function Pagination({paginate,totalPosts,postPerPage,currentPage}:PaginationProp
 		<div className="pagination">
 			{pageGroup ===1 ||
 				(<button
-				onClick={() => handlePageClick((pageGroup-1)*5)}>{'<'}</button>)}
+					onClick={() => handlePageClick((pageGroup-1)*5)}>{'<'}</button>)}
 			{visiblePages.map((page) => {
 				return(
 					<button style={currentPage===page?{backgroundColor:'#2222'}:{}} key={page} onClick={()=>paginate(page)}>{page}</button>
