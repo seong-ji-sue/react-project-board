@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './NoticeBoard.css'
 import {Post} from "../type/Post";
-import PostList from "./PostList";
 import Pagination from "./Pagination";
+import PostList from "./PostList";
 
 
 const _postPerPage: number = 5;//1페이지에 게시물 몇개?
