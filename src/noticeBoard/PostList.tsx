@@ -1,5 +1,6 @@
 import React from 'react';
 import {Post} from "../type/Post";
+import {useHistory} from "react-router";
 // import {useHistory} from "react-router";
 
 
@@ -10,15 +11,15 @@ import {Post} from "../type/Post";
  * @constructor
  */
 interface PostListProps {
-	posts: Post[],
-	changePostId:(postId:number)=> void
+	posts: Post[]
 }
 
-export default function PostList({posts, changePostId}: PostListProps) {
-	// const history  = useHistory();
+export default function PostList({posts}: PostListProps) {
+	const history  = useHistory();
 
 	const pageMoveBulletin = (postId:number):void => {
-		changePostId(postId);
+		history.push(`/post/${postId}`)
+		console.log('asd')
 	}
 
 	return (

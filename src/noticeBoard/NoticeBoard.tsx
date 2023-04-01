@@ -14,12 +14,11 @@ import PostList from "./PostList";
 
 interface NoticeBoardProps {
 	postList: Post[],
-	changePostId:(postId:number)=> void
 }
 
 const _postPerPage: number = 5;//1페이지에 게시물 몇개?
 
-export default function NoticeBoard({postList, changePostId}:NoticeBoardProps) {
+export default function NoticeBoard({postList}:NoticeBoardProps) {
 
 	const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -35,7 +34,7 @@ export default function NoticeBoard({postList, changePostId}:NoticeBoardProps) {
 		<div className={'bulletin-board'}>
 			<h1>Wiki Board</h1>
 			<p>총 게시물 갯수 : {postList.length}</p>
-			<PostList posts={currentPosts} changePostId={changePostId}/>
+			<PostList posts={currentPosts} />
 			<Pagination
 				paginate={paginate}
 				totalPosts={postList.length}

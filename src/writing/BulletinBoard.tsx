@@ -1,22 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import './BulletinBoard.css';
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
 // import {useParams} from "react-router";
 import {Post} from "../type/Post";
-import {Bulletin} from "../type/bulletin";
+import {useParams} from "react-router";
 
 
 interface BulletinBoardProps {
 	postList: Post[],
-	clickPostId:number,
-	addPostList:(bulletin:Bulletin) => void
+	addPostList:(post:Post) => void
 }
 
 
-function BulletinBoard({postList, clickPostId,addPostList}:BulletinBoardProps) {
-	const [bulletin, setBulletin] = useState<Bulletin| null>(null)
+function BulletinBoard({postList,addPostList}:BulletinBoardProps) {
+	const [post, setPost] = useState<Post| null>(null)
 	const [showEdit, setShowEdit] = useState(false);
+	const param = useParams();
+
+	console.log(param)
+
+	useEffect(() => {
+		
+	},[])
 
 
 	// 랜더링이 자주 일어남
@@ -31,16 +35,16 @@ function BulletinBoard({postList, clickPostId,addPostList}:BulletinBoardProps) {
 		const formData = new FormData(e.currentTarget);
 		const title = formData.get('title') as string
 		const body = formData.get('body') as string
-		const newBulletin = {id:postList.length+1, title, body}
-		setBulletin(newBulletin)
-		addPostList(newBulletin)
+		const newPost = {id:postList.length+1, title, body}
+		setPost(newPost)
+		addPostList(newPost)
 	}
 
 
 
 	return (
 		<div className="write-bulletin">
-			<h1>Write Bulletin</h1>
+			<h1>Write Bulletin Board</h1>
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"

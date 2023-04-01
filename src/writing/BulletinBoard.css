@@ -16,6 +16,10 @@
     font-size: 16px;
 }
 
+.write-bulletin textarea{
+    height: 200px;
+}
+
 .write-bulletin button {
     background-color: #4caf50;
     color: white;
