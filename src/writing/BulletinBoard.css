@@ -1,0 +1,31 @@
+.write-bulletin {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.write-bulletin form {
+    margin-top: 20px;
+}
+
+.write-bulletin input,
+.write-bulletin textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.write-bulletin button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.write-bulletin button:hover {
+    background-color: #3e8e41;
+}
