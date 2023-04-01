@@ -11,16 +11,11 @@ import {useHistory} from "react-router";
  * @constructor
  */
 interface PostListProps {
-	posts: Post[]
+	posts: Post[],
+	pageMoveBulletin:(postId:number)=>void
 }
 
-export default function PostList({posts}: PostListProps) {
-	const history  = useHistory();
-
-	const pageMoveBulletin = (postId:number):void => {
-		history.push(`/post/${postId}`)
-		console.log('asd')
-	}
+export default function PostList({posts,pageMoveBulletin}: PostListProps) {
 
 	return (
 		<div className="post-list">

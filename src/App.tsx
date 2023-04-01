@@ -4,8 +4,6 @@ import {Post} from "./type/Post";
 import NoticeBoard from "./noticeBoard/NoticeBoard";
 import BulletinBoard from "./writing/BulletinBoard";
 
-
-
 function App() {
 	const [postList, setPostList] = useState<Post[]>([]) //게시글 데이터
 
@@ -16,12 +14,23 @@ function App() {
 	},[])
 
 	const addPostList = (post:Post) => {setPostList([...postList,post])}
+	const editPostList = (editPost:Post) => {
+		setPostList(
+			postList.map((post) =>
+				post.id === editPost.id ? editPost : post
+			)
+		)
+	}
 
-return (
+	return (
 		<BrowserRouter>
 			<Switch>
 				<Route exact path={'/'} render={()=><NoticeBoard postList={postList} />}/>
-				<Route path={'/post/:postId'} render={()=><BulletinBoard postList={postList} addPostList={addPostList} />} />
+				<Route path={'/post/:postId'} render={()=><BulletinBoard
+					postList={postList}
+					addPostList={addPostList}
+					editPostList={editPostList}
+				/>} />
 			</Switch>
 		</BrowserRouter>
   );
