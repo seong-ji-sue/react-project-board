@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {Post} from "./type/Post";
 import NoticeBoard from "./noticeBoard/NoticeBoard";
@@ -18,7 +18,6 @@ function App() {
 	}
 
 	const editPostList = (editPost:Post) => {
-		console.log('editPost')
 		setPostList(
 			postList.map((post) =>
 				post.id === editPost.id ? editPost : post

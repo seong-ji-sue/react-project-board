@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './BulletinBoard.css';
-// import {useParams} from "react-router";
 import {Post} from "../type/Post";
 import {useHistory, useParams} from "react-router";
 import {Page} from "../type/page";
+import {pageUrl} from "../util/pageUrl";
 
 
 interface BulletinBoardProps {
@@ -22,6 +22,8 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 
 	useEffect(() => {
 		if(param.page === Page.detail){
+			console.log('detail')
+			console.log(param.postId)
 			const findPost = postList.find((post) => {
 				return post.id === Number(param.postId);
 			})
@@ -35,7 +37,7 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 		setSelectedPost({...selectedPost,[e.target.name]:e.target.value} as Post)
 	}
 
-	const handleAdd = (e:React.ChangeEvent<HTMLFormElement>) => {
+	const handleSubmit = (e:React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const title = formData.get('title') as string
@@ -53,21 +55,21 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 	}
 
 	const pageMove = useCallback((page:Page, postId?:number) => {
-		const pageUrl = page ===Page.list ? '/' : `/${page}/${postId}`;
-		history.push(pageUrl)
+		history.push(pageUrl(page, postId))
 	},[])
 
+	//링크 삽입구간
 	// const replaceLink = () => {
 	// 	const example = 'qui est esse'
 	// 	const regex = new RegExp(`\\b${example}\\b`, 'gi');
-	// 	const newText = selectedPost?.body.replace(regex, `<a href="#">${example}</a>`);
+	// 	const newText = selectedPost?.body.replace(regex, `<a href={}>${example}</a>`);
 	// 	console.log(newText)
 	// }
 
 	return (
 		<div className="write-bulletin">
 			<h1>Write Bulletin Board</h1>
-			<form onSubmit={handleAdd}>
+			<form onSubmit={handleSubmit}>
 				<input
 					type="text"
 					name={'title'}
@@ -83,7 +85,6 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 					onChange={handleChange}
 					readOnly={!showEdit}
 				/>
-				{/* 여기 작업중, create detail update 함수 다 따로 만들기 */}
 				{param.page === Page.create && (<button type="submit">완료</button>)}{/*detail 이동, pageList 데이터 추가*/}
 				{param.page === Page.detail && (<button onClick={()=>{pageMove(Page.update,param.postId); setShowEdit(true);}}>수정하기</button>)}{/*update 이동 */}
 				{param.page === Page.update && (<button onClick={() => {handleEdit(selectedPost as Post)}}>수정완료</button>)}{/*detail 이동, pageList 데이터 수정*/}

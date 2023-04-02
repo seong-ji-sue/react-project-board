@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 import PostList from "./PostList";
 import {useHistory} from "react-router";
 import {Page} from "../type/page";
+import {pageUrl} from "../util/pageUrl";
 
 /**
  * 게시판 전체
@@ -30,8 +31,7 @@ export default function NoticeBoard({postList}:NoticeBoardProps) {
 	const paginate = useCallback((pageNumber:number):void => {setCurrentPage(pageNumber)},[])
 	//페이지 이동
 	const pageMove = useCallback((page:Page, postId?:number) => {
-		const pageUrl = page ===Page.list ? '/' : `/${page}/${postId}`;
-		history.push(pageUrl)
+		history.push(pageUrl(page,postId))
 	},[])
 
 	return (
