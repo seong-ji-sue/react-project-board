@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './BulletinBoard.css';
-import {Post} from "../type/Post";
+import {Post} from "../type/post";
 import {useHistory, useParams} from "react-router";
 import {Page} from "../type/page";
 import {pageUrl} from "../util/pageUrl";
+import Title from "../title/Title";
 
 
 interface BulletinBoardProps {
@@ -14,7 +15,6 @@ interface BulletinBoardProps {
 
 
 function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
-
 	const [selectedPost, setSelectedPost] = useState<Post| null>(null)
 	const [showEdit, setShowEdit] = useState<boolean>(false)
 	const param:any = useParams();
@@ -22,8 +22,6 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 
 	useEffect(() => {
 		if(param.page === Page.detail){
-			console.log('detail')
-			console.log(param.postId)
 			const findPost = postList.find((post) => {
 				return post.id === Number(param.postId);
 			})
@@ -58,17 +56,9 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 		history.push(pageUrl(page, postId))
 	},[])
 
-	//링크 삽입구간
-	// const replaceLink = () => {
-	// 	const example = 'qui est esse'
-	// 	const regex = new RegExp(`\\b${example}\\b`, 'gi');
-	// 	const newText = selectedPost?.body.replace(regex, `<a href={}>${example}</a>`);
-	// 	console.log(newText)
-	// }
-
 	return (
 		<div className="write-bulletin">
-			<h1>Write Bulletin Board</h1>
+			<Title page={param.page} />
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"

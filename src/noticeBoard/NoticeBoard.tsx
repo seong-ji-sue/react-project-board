@@ -1,11 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import './NoticeBoard.css'
-import {Post} from "../type/Post";
+import {Post} from "../type/post";
 import Pagination from "./Pagination";
 import PostList from "./PostList";
 import {useHistory} from "react-router";
 import {Page} from "../type/page";
 import {pageUrl} from "../util/pageUrl";
+import {usePostState} from "../context/PostContext";
 
 /**
  * 게시판 전체
@@ -19,6 +20,7 @@ interface NoticeBoardProps {
 const _postPerPage: number = 5;//1페이지에 게시물 몇개?
 
 export default function NoticeBoard({postList}:NoticeBoardProps) {
+	const postState = usePostState();
 	const history  = useHistory();
 	const [currentPage, setCurrentPage] = useState<number>(1);
 

@@ -1,8 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import {Post} from "./type/Post";
+import {Post} from "./type/post";
 import NoticeBoard from "./noticeBoard/NoticeBoard";
 import BulletinBoard from "./writing/BulletinBoard";
+import {PostProvider} from "./context/PostContext";
 
 function App() {
 	const [postList, setPostList] = useState<Post[]>([]) //게시글 데이터
@@ -26,16 +27,18 @@ function App() {
 	}
 
 	return (
-		<BrowserRouter>
-			<Switch>
-				<Route exact path={'/'} render={()=><NoticeBoard postList={postList} />}/>
-				<Route path={'/:page/:postId'} render={()=><BulletinBoard
-					postList={postList}
-					addPostList={addPostList}
-					editPostList={editPostList}
-				/>} />
-			</Switch>
-		</BrowserRouter>
+		<PostProvider>
+			<BrowserRouter>
+				<Switch>
+					<Route exact path={'/'} render={()=><NoticeBoard postList={postList} />}/>
+					<Route path={'/:page/:postId'} render={()=><BulletinBoard
+						postList={postList}
+						addPostList={addPostList}
+						editPostList={editPostList}
+					/>} />
+				</Switch>
+			</BrowserRouter>
+		</PostProvider>
   );
 }
 
