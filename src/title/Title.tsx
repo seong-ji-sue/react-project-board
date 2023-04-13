@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Page} from "../type/page";
 
 interface TitleProps {
@@ -8,7 +8,7 @@ interface TitleProps {
 function Title({page}:TitleProps) {
   return (
     <h1>
-			{page}
+			Wiki Board - {page}
     </h1>
   );
 }

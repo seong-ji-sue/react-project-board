@@ -1,6 +1,7 @@
 import React from 'react';
 import {Post} from "../type/post";
 import {Page} from "../type/page";
+import {usePageNavigation} from "../hooks/usePageMove";
 
 
 /**
@@ -10,17 +11,17 @@ import {Page} from "../type/page";
  */
 interface PostListProps {
 	posts: Post[],
-	pageMove:(page:Page,postId:number)=>void
 }
 
-export default function PostList({posts,pageMove}: PostListProps) {
+export default function PostList({posts}: PostListProps) {
+	const {navigateTo} = usePageNavigation();
 
 	return (
 		<div className="post-list">
 			{posts.map((post) => {
 				return(
 					<div className="post" key={'post'+post.id}>
-						<h2 onClick={() => {pageMove(Page.detail, post.id)}}>{post.title}</h2>
+						<h2 onClick={() => {navigateTo(Page.detail, post.id)}}>{post.title}</h2>
 					</div>
 				)
 			})}
