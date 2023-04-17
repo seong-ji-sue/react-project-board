@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 
 
 interface PaginationProps {
@@ -18,32 +18,30 @@ interface PaginationProps {
  */
 
 export default function Pagination({paginate,totalPosts,postPerPage,currentPage}:PaginationProps){
-	const totalPages = Math.ceil(totalPosts/postPerPage)//페이지 갯수
-	const [pageGroup, setPageGroup] = useState(1);//표시할 페이지 그룹
+	const totalPages = Math.ceil(totalPosts/postPerPage)
+	const pageGroup = useRef<number>(1)
 
-	//전체 페이지 얕은 복사
 	const pages = Array.from({length: totalPages}, (_, i) => i+1);
 
-	const startPage = (pageGroup - 1) * 5; //페이지 앞
-	const endPage = startPage + 4; //페이지 끝
-	const visiblePages = pages.slice(startPage, endPage + 1);//보여지는 페이지
+	const startPage = (pageGroup.current - 1) * 5;
+	const endPage = startPage + 4;
+	const visiblePages = pages.slice(startPage, endPage + 1);
+	console.log('Pagination')
 
-	//버튼을 클릭할 때 보여지는 페이지 그룹과 선택되어지는 페이지 랜더링
 	const handlePageClick = (page:number):void => {
 		if(page<=0 || page>totalPages) {
 			return;
 		}
-		paginate(page)
 		const newPageGroup = Math.ceil(page/5);
-		setPageGroup(newPageGroup);
+		paginate(page)
+		pageGroup.current = newPageGroup
 	}
 
-	//이전 버튼 레이아웃 이전 페이지 계산
 	const prevButton = () => {
-		if(pageGroup ===1){
+		if(pageGroup.current ===1){
 			return null;
 		}
-		const prevPage = (pageGroup -1) * 5;
+		const prevPage = (pageGroup.current -1) * 5;
 		return (
 			<button onClick={() => handlePageClick(prevPage)}>
 				{'<'}
@@ -51,12 +49,11 @@ export default function Pagination({paginate,totalPosts,postPerPage,currentPage}
 		)
 	}
 
-	//다음페이지 계산
 	const nextButton = () => {
-		if(pageGroup === Math.ceil(totalPages/5)) {
+		if(pageGroup.current === Math.ceil(totalPages/5)) {
 			return null;
 		}
-		const nextPage = pageGroup * 5 + 1;
+		const nextPage = pageGroup.current * 5 + 1;
 		return (
 			<button onClick={() => handlePageClick(nextPage)}>
 				{'>'}
@@ -65,7 +62,6 @@ export default function Pagination({paginate,totalPosts,postPerPage,currentPage}
 
 	}
 
-	//보여지는 페이지 그룹
 	const pagesNumber = () => {
 		return visiblePages.map((page) => {
 			const buttonColorRender = currentPage===page ? {backgroundColor:'#2222'} : {};

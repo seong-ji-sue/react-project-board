@@ -1,35 +1,29 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import './BulletinBoard.css';
-import {Post} from "../type/Post";
-import {useHistory, useParams} from "react-router";
+import {Post} from "../type/post";
+import {useParams} from "react-router";
 import {Page} from "../type/page";
-import {pageUrl} from "../util/pageUrl";
+import Title from "../title/Title";
+import {usePostDispatch, usePostState} from "../context/PostContext";
+import {usePageNavigation} from "../hooks/usePageMove";
 
-
-interface BulletinBoardProps {
-	postList: Post[],
-	addPostList:(post:Post) => void
-	editPostList:(editPost:Post)=>void
-}
-
-
-function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
-
+function BulletinBoard() {
 	const [selectedPost, setSelectedPost] = useState<Post| null>(null)
-	const [showEdit, setShowEdit] = useState<boolean>(false)
+	const showEdit = useRef<boolean>(false);
+	const state = usePostState();
+	const postList = state.data
+	const dispatch = usePostDispatch();
 	const param:any = useParams();
-	const history = useHistory();
+	const {navigateTo} = usePageNavigation();
 
 	useEffect(() => {
 		if(param.page === Page.detail){
-			console.log('detail')
-			console.log(param.postId)
-			const findPost = postList.find((post) => {
+			const findPost = postList.find((post:any ) => {//userID 가 포함됨
 				return post.id === Number(param.postId);
 			})
 			setSelectedPost(findPost as Post)
 		} else if(param.page === Page.create) {
-			setShowEdit(true)
+			showEdit.current = true;
 		}
 	},[])
 
@@ -43,32 +37,25 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 		const title = formData.get('title') as string
 		const body = formData.get('body') as string
 		const newPost = {id:Number(postList.length+1), title, body}
-		addPostList(newPost)
-		setShowEdit(false)
-		pageMove(Page.detail, newPost.id)
+		dispatch({type:'ADD_POST', payload: newPost})
+		showEdit.current = false;
+		navigateTo(Page.detail, newPost.id)
 	}
 
-	const handleEdit = (editPost:Post) => {
-		editPostList(editPost);
-		setShowEdit(false)
-		pageMove(Page.detail, param.postId)
+	const handleEdit = () => {
+		dispatch({type:'UPDATE_POST', payload: selectedPost as Post});
+		showEdit.current = false;
+		navigateTo(Page.detail, param.postId)
 	}
 
-	const pageMove = useCallback((page:Page, postId?:number) => {
-		history.push(pageUrl(page, postId))
-	},[])
-
-	//링크 삽입구간
-	// const replaceLink = () => {
-	// 	const example = 'qui est esse'
-	// 	const regex = new RegExp(`\\b${example}\\b`, 'gi');
-	// 	const newText = selectedPost?.body.replace(regex, `<a href={}>${example}</a>`);
-	// 	console.log(newText)
-	// }
+	const handleUpdate = () => {
+		showEdit.current = true;
+		navigateTo(Page.update,param.postId);
+	}
 
 	return (
 		<div className="write-bulletin">
-			<h1>Write Bulletin Board</h1>
+			<Title page={param.page} />
 			<form onSubmit={handleSubmit}>
 				<input
 					type="text"
@@ -86,9 +73,9 @@ function BulletinBoard({postList,addPostList,editPostList}:BulletinBoardProps) {
 					readOnly={!showEdit}
 				/>
 				{param.page === Page.create && (<button type="submit">완료</button>)}{/*detail 이동, pageList 데이터 추가*/}
-				{param.page === Page.detail && (<button onClick={()=>{pageMove(Page.update,param.postId); setShowEdit(true);}}>수정하기</button>)}{/*update 이동 */}
-				{param.page === Page.update && (<button onClick={() => {handleEdit(selectedPost as Post)}}>수정완료</button>)}{/*detail 이동, pageList 데이터 수정*/}
-				{param.page === Page.detail && (<button onClick={() => {pageMove(Page.list)}}>리스트로 이동</button>)}
+				{param.page === Page.detail && (<button onClick={()=>{handleUpdate()}}>수정하기</button>)}{/*update 이동 */}
+				{param.page === Page.update && (<button onClick={() => {handleEdit()}}>수정완료</button>)}{/*detail 이동, pageList 데이터 수정*/}
+				{param.page === Page.detail && (<button onClick={() => {navigateTo(Page.list)}}>리스트로 이동</button>)}
 			</form>
 		</div>
 	);
