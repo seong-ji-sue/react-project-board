@@ -53,6 +53,11 @@ function BulletinBoard() {
 		navigateTo(Page.update,param.postId);
 	}
 
+	const handleDelete = () => {
+		dispatch({type:'DELETE_POST', payload: selectedPost as Post});
+		navigateTo(Page.list);
+	}
+
 	return (
 		<div className="write-bulletin">
 			<Title page={param.page} />
@@ -72,6 +77,7 @@ function BulletinBoard() {
 					onChange={handleChange}
 					readOnly={!showEdit}
 				/>
+				{param.page === Page.detail && (<button onClick={()=>{handleDelete()}}>삭제</button>)}{/*list 이동, 데이터 삭제*/}
 				{param.page === Page.create && (<button type="submit">완료</button>)}{/*detail 이동, pageList 데이터 추가*/}
 				{param.page === Page.detail && (<button onClick={()=>{handleUpdate()}}>수정하기</button>)}{/*update 이동 */}
 				{param.page === Page.update && (<button onClick={() => {handleEdit()}}>수정완료</button>)}{/*detail 이동, pageList 데이터 수정*/}
