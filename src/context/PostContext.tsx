@@ -8,11 +8,12 @@ interface State {
 }
 
 type Action =
-	|{ type: 'FETCH_INIT' }
+	| { type: 'FETCH_INIT' }
 	| { type: 'FETCH_SUCCESS', payload: Post[] }
 	| { type: 'FETCH_FAILURE', payload: any }
-	| {type: 'ADD_POST', payload: Post}
-	| {type: 'UPDATE_POST', payload: Post}
+	| { type: 'ADD_POST', payload: Post}
+	| { type: 'UPDATE_POST', payload: Post}
+	| { type: 'DELETE_POST', payload: Post}
 
 type PostDispatch = Dispatch<Action>
 
@@ -33,6 +34,9 @@ function reducer(state:State, action:Action):State {
 			const updateData = state.data.map((post:any) =>//userId가 포함됨
 				post.id === action.payload.id ? action.payload : post)
 			return {...state, loading:false, data: updateData, error:null}
+		case 'DELETE_POST':
+			const deleteData = state.data.filter((post:any) => post.id !== action.payload.id)
+			return {...state, loading:false, data: deleteData, error: null};
 		default:
 			throw new Error('Unhandled action')
 	}
